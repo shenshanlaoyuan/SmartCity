@@ -10,14 +10,24 @@ import android.view.ViewGroup;
 
 import com.shenshanlaoyuan.smartcity.activity.MainActivity;
 
+/**
+ * @author Administrator
+ * @创建时间 2015-7-4 下午4:07:00
+ * @描述 TODO
+ *
+ * @ svn提交者：$Author: gd $
+ * @ 提交时间: $Date: 2015-07-04 16:27:53 +0800 (Sat, 04 Jul 2015) $
+ * @ 当前版本: $Rev: 14 $
+ */
 public abstract class BaseFragment extends Fragment
 {
 
 	protected MainActivity mainActivity;//上下文
 	
-	
+	// XXXDao dao = new XXXDao(getActivity);
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		mainActivity = (MainActivity) getActivity();//获取fragment所在Activity;
 	}

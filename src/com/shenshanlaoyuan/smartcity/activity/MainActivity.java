@@ -1,6 +1,8 @@
 package com.shenshanlaoyuan.smartcity.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Window;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -10,9 +12,12 @@ import com.shenshanlaoyuan.smartcity.view.LeftMenuFragment;
 import com.shenshanlaoyuan.smartcity.view.MainContentFragment;
 
 /**
- * @author hp
+ * @author Administrator
+ * @创建时间 2015-7-4 下午2:12:43
+ * @描述 智慧北京的主界面
  * 
- *         智慧城市的主界面
+ *     @ svn提交者：$Author: gd $ @ 提交时间: $Date: 2015-07-04 15:55:43 +0800 (Sat, 04
+ *     Jul 2015) $ @ 当前版本: $Rev: 26 $
  */
 public class MainActivity extends SlidingFragmentActivity {
 	private static final String LEFT_MUNE_TAG = "LEFT_MUNE_TAG";
@@ -20,6 +25,7 @@ public class MainActivity extends SlidingFragmentActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);// 隐藏标题
 		initView();// 初始化界面
@@ -28,13 +34,32 @@ public class MainActivity extends SlidingFragmentActivity {
 	}
 
 	/**
+	 * @return 返回左侧菜单的fragment
+	 */
+	public LeftMenuFragment getLeftMenuFragment() {
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		LeftMenuFragment leftFragment = (LeftMenuFragment) fragmentManager
+				.findFragmentByTag(LEFT_MUNE_TAG);
+		return leftFragment;
+	}
+
+	/**
+	 * @return 返回左侧菜单的fragment
+	 */
+	public MainContentFragment getMainMenuFragment() {
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		MainContentFragment leftFragment = (MainContentFragment) fragmentManager
+				.findFragmentByTag(MAIN_MUNE_TAG);
+		return leftFragment;
+	}
+
+	/**
 	 * 初始化数据
 	 */
 	private void initData() {
-		android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentManager fragmentManager = getSupportFragmentManager();
 		// 1. 获取事物
-		android.support.v4.app.FragmentTransaction transaction = fragmentManager
-				.beginTransaction();
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
 		// 2. 完成替换
 
 		// 完成左侧菜单界面的替换
