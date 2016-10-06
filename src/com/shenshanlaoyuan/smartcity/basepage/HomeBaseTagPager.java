@@ -1,25 +1,12 @@
 package com.shenshanlaoyuan.smartcity.basepage;
 
-
-
-
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.shenshanlaoyuan.smartcity.activity.MainActivity;
 
-
-/**
- * @author Administrator
- * @创建时间 2015-7-4 下午5:30:22
- * @描述 TODO
- * 
- *     @ svn提交者：$Author: gd $ @ 提交时间: $Date: 2015-07-04 17:38:44 +0800 (Sat, 04
- *     Jul 2015) $ @ 当前版本: $Rev: 23 $
- */
-public class HomeBaseTagPager extends BaseTagPage
-{
+public class HomeBaseTagPager extends BaseTagPage {
 
 	public HomeBaseTagPager(MainActivity context) {
 		super(context);
@@ -27,10 +14,10 @@ public class HomeBaseTagPager extends BaseTagPage
 
 	@Override
 	public void initData() {
-		
-		//屏蔽菜单按钮
+
+		// 屏蔽菜单按钮
 		ib_menu.setVisibility(View.GONE);
-		
+
 		// 设置本page的标题
 		tv_title.setText("主页");
 

@@ -8,14 +8,19 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
-        <activity android:name="com.shenshanlaoyuan.smartcity.activity.MainActivity"></activity>
-        <activity android:name="com.shenshanlaoyuan.smartcity.activity.GuideActivity"></activity>
+        <activity
+            android:name="com.shenshanlaoyuan.smartcity.activity.MainActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults" >
+        </activity>
+        <activity android:name="com.shenshanlaoyuan.smartcity.activity.GuideActivity" >
+        </activity>
         <activity
             android:name="com.shenshanlaoyuan.smartcity.activity.SplashActivity"
             android:label="@string/app_name" >

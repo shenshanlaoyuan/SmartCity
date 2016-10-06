@@ -1,8 +1,5 @@
 package com.shenshanlaoyuan.smartcity.view;
 
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,25 +21,21 @@ import com.shenshanlaoyuan.smartcity.basepage.SettingCenterBaseTagPager;
 import com.shenshanlaoyuan.smartcity.basepage.SmartServiceBaseTagPager;
 
 /**
- * @author Administrator
- * @创建时间 2015-7-4 下午4:17:20
- * @描述 主界面的fragment
+ * @author hp
  * 
- *     @ svn提交者：$Author: gd $ @ 提交时间: $Date: 2015-07-04 17:09:14 +0800 (Sat, 04
- *     Jul 2015) $ @ 当前版本: $Rev: 28 $
+ *         主界面的fragment
  */
-public class MainContentFragment extends BaseFragment
-{
+public class MainContentFragment extends BaseFragment {
 
 	@ViewInject(R.id.vp_main_content_pages)
-	private MyViewPager			viewPager;
+	private MyViewPager viewPager;
 
 	@ViewInject(R.id.rg_content_radios)
-	private RadioGroup			rg_radios;
+	private RadioGroup rg_radios;
 
-	private List<BaseTagPage>	pages	= new ArrayList<BaseTagPage>();
+	private List<BaseTagPage> pages = new ArrayList<BaseTagPage>();
 
-	private int					selectIndex;//设置当前选择的页面编号
+	private int selectIndex;// 设置当前选择的页面编号
 
 	@Override
 	public void initEvent() {
@@ -74,36 +67,37 @@ public class MainContentFragment extends BaseFragment
 				default:
 					break;
 				}// end switch (checkedId) {
-				
+
 				switchPage();
 			}
 		});
 		super.initEvent();
 	}
-	
+
 	/**
 	 * 左侧菜单点击，让主界面切换不同的页面
 	 */
-	public void leftMenuClickSwitchPage(int subSelectionIndex){
+	public void leftMenuClickSwitchPage(int subSelectionIndex) {
 		BaseTagPage baseTagPage = pages.get(selectIndex);
 		baseTagPage.switchPage(subSelectionIndex);
 	}
-	
 
 	/**
-	 *  设置选中的页面
+	 * 设置选中的页面
 	 */
 	protected void switchPage() {
-		//BaseTagPage currentPage = pages.get(selectIndex);
-		viewPager.setCurrentItem(selectIndex);//设置viewpager显示页面
-		
-		//如果是第一个或者是最后一个 不让左侧菜单滑动出来
+		// BaseTagPage currentPage = pages.get(selectIndex);
+		viewPager.setCurrentItem(selectIndex);// 设置viewpager显示页面
+
+		// 如果是第一个或者是最后一个 不让左侧菜单滑动出来
 		if (selectIndex == 0 || selectIndex == pages.size() - 1) {
-			//不让左侧菜单滑动出来
-			mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);//滑不处理
+			// 不让左侧菜单滑动出来
+			mainActivity.getSlidingMenu().setTouchModeAbove(
+					SlidingMenu.TOUCHMODE_NONE);// 滑不处理
 		} else {
-			//可以滑动出左侧菜单
-			mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);//屏幕任何位置都可以滑动出
+			// 可以滑动出左侧菜单
+			mainActivity.getSlidingMenu().setTouchModeAbove(
+					SlidingMenu.TOUCHMODE_FULLSCREEN);// 屏幕任何位置都可以滑动出
 		}
 	}
 
@@ -133,18 +127,17 @@ public class MainContentFragment extends BaseFragment
 
 		MyAdapter adapter = new MyAdapter();
 		viewPager.setAdapter(adapter);
-		
-		//viewPager.setOffscreenPageLimit(2);//设置预加载为：前后各2个页面
-		
-		//设置默认选择首页
+
+		// viewPager.setOffscreenPageLimit(2);//设置预加载为：前后各2个页面
+
+		// 设置默认选择首页
 		switchPage();
-		//设置第一个按钮被选中(首页)
+		// 设置第一个按钮被选中(首页)
 		rg_radios.check(R.id.rb_main_content_home);
-		
+
 	}
 
-	private class MyAdapter extends PagerAdapter
-	{
+	private class MyAdapter extends PagerAdapter {
 
 		@Override
 		public int getCount() {
@@ -154,13 +147,13 @@ public class MainContentFragment extends BaseFragment
 
 		@Override
 		public Object instantiateItem(ViewGroup container, int position) {
-System.out.println("instantiateItem:" + position);			
+			System.out.println("instantiateItem:" + position);
 			// TODO Auto-generated method stub
 			BaseTagPage baseTagPage = pages.get(position);
 			View root = baseTagPage.getRoot();
 			container.addView(root);
-			
-			//加载数据库
+
+			// 加载数据库
 			baseTagPage.initData();
 			return root;
 		}
@@ -174,7 +167,7 @@ System.out.println("instantiateItem:" + position);
 		@Override
 		public void destroyItem(ViewGroup container, int position, Object object) {
 			// TODO Auto-generated method stub
-System.out.println("destroyItem:" + position);	
+			System.out.println("destroyItem:" + position);
 			container.removeView((View) object);
 		}
 

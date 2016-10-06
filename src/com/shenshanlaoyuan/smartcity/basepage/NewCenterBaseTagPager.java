@@ -1,29 +1,144 @@
 package com.shenshanlaoyuan.smartcity.basepage;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import com.google.gson.Gson;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.shenshanlaoyuan.smartcity.activity.MainActivity;
+import com.shenshanlaoyuan.smartcity.domain.NewsCenterData;
+import com.shenshanlaoyuan.smartcity.newscenterpage.BaseNewsCenterPage;
+import com.shenshanlaoyuan.smartcity.newscenterpage.InteractBaseNewsCenterPage;
+import com.shenshanlaoyuan.smartcity.newscenterpage.NewsBaseNewsCenterPage;
+import com.shenshanlaoyuan.smartcity.newscenterpage.PhotosBaseNewsCenterPage;
+import com.shenshanlaoyuan.smartcity.newscenterpage.TopicBaseNewsCenterPage;
+import com.shenshanlaoyuan.smartcity.utils.MyConstants;
+import com.shenshanlaoyuan.smartcity.view.LeftMenuFragment.OnSwitchPageListener;
 
-import android.content.Context;
-import android.view.Gravity;
-import android.widget.TextView;
-
-
-public class NewCenterBaseTagPager extends BaseTagPage
-{
+/**
+ * @author hp
+ * 
+ *         新闻中心页面
+ */
+public class NewCenterBaseTagPager extends BaseTagPage {
+	// 新闻中心要显示的四个页面
+	private List<BaseNewsCenterPage> newsCenterPages = new ArrayList<BaseNewsCenterPage>();
+	private NewsCenterData newsCenterData;
 
 	public NewCenterBaseTagPager(MainActivity context) {
 		super(context);
 	}
-	
+
 	@Override
 	public void initData() {
-		tv_title.setText("新闻中心");
-		
-		TextView tv = new TextView(mainActivity);
-		tv.setText("新闻中心的内容");
-		tv.setTextSize(25);
-		tv.setGravity(Gravity.CENTER);
+
+		// 1.获取网络数据
+		HttpUtils httpUtils = new HttpUtils();
+		httpUtils.send(HttpMethod.GET, MyConstants.NEWSCENTERURL,
+				new RequestCallBack<String>() {
+
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						// 访问数据成功
+						String jsonData = responseInfo.result;
+						// System.out.println(jsonData);
+						// 2.解析数据
+						parseData(jsonData);
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						// 访问数据失败
+						System.out.println("网络请求数据失败：" + error);
+					}
+
+				});
+
 		super.initData();
+	}
+
+	/**
+	 * 解析json数据
+	 * 
+	 * @param jsonData
+	 *            从网络获取到的json数据
+	 */
+	protected void parseData(String jsonData) {
+		// google提供的json解析器
+		Gson gson = new Gson();
+
+		newsCenterData = gson.fromJson(jsonData, NewsCenterData.class);
+
+		// 3.数据的处理
+
+		// 在这里给左侧菜单设置数据
+		// System.out.println(newsCenterData.data.get(0).children.get(0).title);
+		mainActivity.getLeftMenuFragment().setLeftMenuData(newsCenterData.data);
+		// 设置左侧菜单的监听回调
+		mainActivity.getLeftMenuFragment().setOnSwitchPageListener(
+				new OnSwitchPageListener() {
+
+					@Override
+					public void switchPage(int selectionIndex) {
+						System.out.println("直接掉自己实现...............");
+						NewCenterBaseTagPager.this.switchPage(selectionIndex);
+					}
+				});
+
+		// 读取的数据封装到界面容器中，通过左侧菜单点击，显示不同的界面
+		// 根据服务的数据 创建四个页面（按顺序）
+		for (NewsCenterData.NewsData newsData : newsCenterData.data) {
+			BaseNewsCenterPage newsPage = null;
+			// 遍历四个新闻中心页面
+			switch (newsData.type) {
+			case 1:// 新闻页面
+				newsPage = new NewsBaseNewsCenterPage(mainActivity,
+						newsCenterData.data.get(0).children);
+				break;
+			case 10:// 专题页面
+				newsPage = new TopicBaseNewsCenterPage(mainActivity);
+				break;
+			case 2:// 组图页面
+				newsPage = new PhotosBaseNewsCenterPage(mainActivity);
+				break;
+			case 3:// 互动页面
+				newsPage = new InteractBaseNewsCenterPage(mainActivity);
+				break;
+
+			default:
+				break;
+			}
+
+			// 添加新闻中心的页面到容器中
+			newsCenterPages.add(newsPage);
+		}
+
+		// 控制四个页面的显示,默认选择第一个新闻页面
+		switchPage(0);
+	}
+
+	/**
+	 * @param position
+	 *            根据位置，动态显示不同的新闻中心页面
+	 */
+	public void switchPage(int position) {
+		BaseNewsCenterPage baseNewsCenterPage = newsCenterPages.get(position);
+
+		// 显示数据
+		// 设置本page的标题
+		tv_title.setText(newsCenterData.data.get(position).title);
+
+		// 移动掉原来画的内容
+		fl_content.removeAllViews();
+
+		// 初始化数据
+		baseNewsCenterPage.initData();
+		// 替换掉白纸
+		fl_content.addView(baseNewsCenterPage.getRoot());// 添加自己的内容到白纸上
 	}
 
 }

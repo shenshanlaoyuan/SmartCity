@@ -39,7 +39,6 @@
         <RadioButton
             android:id="@+id/rb_main_content_govaffairs"
             style="@style/radioButtonStyle"
-            
             android:drawableTop="@drawable/rb_govaffairs_selector"
             android:text="政务" />
 

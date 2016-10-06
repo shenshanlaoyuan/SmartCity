@@ -12,12 +12,10 @@ import com.shenshanlaoyuan.smartcity.view.LeftMenuFragment;
 import com.shenshanlaoyuan.smartcity.view.MainContentFragment;
 
 /**
- * @author Administrator
- * @创建时间 2015-7-4 下午2:12:43
- * @描述 智慧北京的主界面
+ * @author hp
  * 
- *     @ svn提交者：$Author: gd $ @ 提交时间: $Date: 2015-07-04 15:55:43 +0800 (Sat, 04
- *     Jul 2015) $ @ 当前版本: $Rev: 26 $
+ *         智慧城市的主界面
+ * 
  */
 public class MainActivity extends SlidingFragmentActivity {
 	private static final String LEFT_MUNE_TAG = "LEFT_MUNE_TAG";
