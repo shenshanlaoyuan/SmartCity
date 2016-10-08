@@ -3,6 +3,8 @@ package com.shenshanlaoyuan.smartcity.basepage;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -17,6 +19,7 @@ import com.shenshanlaoyuan.smartcity.newscenterpage.NewsBaseNewsCenterPage;
 import com.shenshanlaoyuan.smartcity.newscenterpage.PhotosBaseNewsCenterPage;
 import com.shenshanlaoyuan.smartcity.newscenterpage.TopicBaseNewsCenterPage;
 import com.shenshanlaoyuan.smartcity.utils.MyConstants;
+import com.shenshanlaoyuan.smartcity.utils.SpTools;
 import com.shenshanlaoyuan.smartcity.view.LeftMenuFragment.OnSwitchPageListener;
 
 /**
@@ -28,6 +31,7 @@ public class NewCenterBaseTagPager extends BaseTagPage {
 	// 新闻中心要显示的四个页面
 	private List<BaseNewsCenterPage> newsCenterPages = new ArrayList<BaseNewsCenterPage>();
 	private NewsCenterData newsCenterData;
+	private Gson gson;
 
 	public NewCenterBaseTagPager(MainActivity context) {
 		super(context);
@@ -36,7 +40,12 @@ public class NewCenterBaseTagPager extends BaseTagPage {
 	@Override
 	public void initData() {
 
-		// 1.获取网络数据
+		//1.获取本地数据
+		String jsonCache = SpTools.getString(mainActivity, MyConstants.NEWSCENTERURL, "");
+		if (!TextUtils.isEmpty(jsonCache)) {
+			parseData(jsonCache);
+		}
+		// 2.获取网络数据
 		HttpUtils httpUtils = new HttpUtils();
 		httpUtils.send(HttpMethod.GET, MyConstants.NEWSCENTERURL,
 				new RequestCallBack<String>() {
@@ -45,6 +54,8 @@ public class NewCenterBaseTagPager extends BaseTagPage {
 					public void onSuccess(ResponseInfo<String> responseInfo) {
 						// 访问数据成功
 						String jsonData = responseInfo.result;
+						//保存数据到本地
+						SpTools.setString(mainActivity, MyConstants.NEWSCENTERURL, jsonData);
 						// System.out.println(jsonData);
 						// 2.解析数据
 						parseData(jsonData);
@@ -69,7 +80,10 @@ public class NewCenterBaseTagPager extends BaseTagPage {
 	 */
 	protected void parseData(String jsonData) {
 		// google提供的json解析器
-		Gson gson = new Gson();
+		if (gson==null) {
+			gson = new Gson();
+		}
+		
 
 		newsCenterData = gson.fromJson(jsonData, NewsCenterData.class);
 
