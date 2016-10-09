@@ -6,10 +6,8 @@ import java.util.List;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.lidroid.xutils.ViewUtils;
@@ -19,6 +17,7 @@ import com.shenshanlaoyuan.smartcity.R;
 import com.shenshanlaoyuan.smartcity.activity.MainActivity;
 import com.shenshanlaoyuan.smartcity.domain.NewsCenterData;
 import com.shenshanlaoyuan.smartcity.domain.NewsCenterData.NewsData.ViewTagData;
+import com.shenshanlaoyuan.smartcity.newstpipage.TPINewsNewsCenterPager;
 import com.viewpagerindicator.TabPageIndicator;
 
 public class NewsBaseNewsCenterPage extends BaseNewsCenterPage {
@@ -28,11 +27,11 @@ public class NewsBaseNewsCenterPage extends BaseNewsCenterPage {
 
 	@ViewInject(R.id.newcenter_tpi)
 	private TabPageIndicator tpi_newscenter;
-	
+
 	@OnClick(R.id.newcenter_ib_nextpage)
-	public void next(View v){
-		//切换到下一个页面
-		vp_newscenter.setCurrentItem(vp_newscenter.getCurrentItem()+1);
+	public void next(View v) {
+		// 切换到下一个页面
+		vp_newscenter.setCurrentItem(vp_newscenter.getCurrentItem() + 1);
 	}
 
 	private List<ViewTagData> viewTagDatas = new ArrayList<NewsCenterData.NewsData.ViewTagData>(); // 页签的数据
@@ -46,35 +45,37 @@ public class NewsBaseNewsCenterPage extends BaseNewsCenterPage {
 
 	@Override
 	public void initEvent() {
-		
-		//给Viewpager添加页面切换的监听事件，当页面位于第一个可以滑动出左侧菜单，否则不滑动
+
+		// 给Viewpager添加页面切换的监听事件，当页面位于第一个可以滑动出左侧菜单，否则不滑动
 		tpi_newscenter.setOnPageChangeListener(new OnPageChangeListener() {
-			
+
 			@Override
 			public void onPageSelected(int arg0) {
 				// TODO Auto-generated method stub
-				if (arg0==0) {
-					mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+				if (arg0 == 0) {
+					mainActivity.getSlidingMenu().setTouchModeAbove(
+							SlidingMenu.TOUCHMODE_FULLSCREEN);
 				} else {
-					mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+					mainActivity.getSlidingMenu().setTouchModeAbove(
+							SlidingMenu.TOUCHMODE_NONE);
 				}
 			}
-			
+
 			@Override
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onPageScrollStateChanged(int arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		super.initEvent();
 	}
-	
+
 	@Override
 	public View initView() {
 		View newsCenterRoot = View.inflate(mainActivity,
@@ -130,14 +131,21 @@ public class NewsBaseNewsCenterPage extends BaseNewsCenterPage {
 		@Override
 		public Object instantiateItem(ViewGroup container, int position) {
 			// 要展示的内容，
-			TextView tv = new TextView(mainActivity);
-			tv.setText(viewTagDatas.get(position).title);
-			tv.setTextSize(25);
-			tv.setGravity(Gravity.CENTER);
-
-			container.addView(tv);
-
-			return tv;
+			/*
+			 * TextView tv = new TextView(mainActivity);
+			 * tv.setText(viewTagDatas.get(position).title); tv.setTextSize(25);
+			 * tv.setGravity(Gravity.CENTER);
+			 * 
+			 * container.addView(tv);
+			 * 
+			 * return tv;
+			 */
+			// 要展示的内容，
+			TPINewsNewsCenterPager tpiPager = new TPINewsNewsCenterPager(
+					mainActivity, viewTagDatas.get(position));
+			View rootView = tpiPager.getRootView();
+			container.addView(rootView);
+			return rootView;
 		}
 
 		@Override

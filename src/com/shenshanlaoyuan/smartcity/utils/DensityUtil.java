@@ -10,7 +10,7 @@ import android.content.Context;
  */
 public class DensityUtil {
 	/**
-	 * 根据手机的分辨率从 dip 的单位 转成为 px(像素)
+	 * 根据手机的分辨率从 dip(独立像素) 的单位 转成为 px(像素)
 	 */
 	public static int dip2px(Context context, float dpValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
@@ -18,7 +18,7 @@ public class DensityUtil {
 	}
 
 	/**
-	 * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+	 * 根据手机的分辨率从 px(像素) 的单位 转成为 dp(dip)
 	 */
 	public static int px2dip(Context context, float pxValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
